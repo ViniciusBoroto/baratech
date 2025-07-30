@@ -3,6 +3,7 @@
 package mocks
 
 import (
+	context "context"
 	domain "dreampc/domain"
 
 	mock "github.com/stretchr/testify/mock"
@@ -21,9 +22,9 @@ func (_m *CpuRepository) EXPECT() *CpuRepository_Expecter {
 	return &CpuRepository_Expecter{mock: &_m.Mock}
 }
 
-// All provides a mock function with no fields
-func (_m *CpuRepository) All() ([]domain.Cpu, error) {
-	ret := _m.Called()
+// All provides a mock function with given fields: ctx
+func (_m *CpuRepository) All(ctx context.Context) ([]domain.Cpu, error) {
+	ret := _m.Called(ctx)
 
 	if len(ret) == 0 {
 		panic("no return value specified for All")
@@ -31,19 +32,19 @@ func (_m *CpuRepository) All() ([]domain.Cpu, error) {
 
 	var r0 []domain.Cpu
 	var r1 error
-	if rf, ok := ret.Get(0).(func() ([]domain.Cpu, error)); ok {
-		return rf()
+	if rf, ok := ret.Get(0).(func(context.Context) ([]domain.Cpu, error)); ok {
+		return rf(ctx)
 	}
-	if rf, ok := ret.Get(0).(func() []domain.Cpu); ok {
-		r0 = rf()
+	if rf, ok := ret.Get(0).(func(context.Context) []domain.Cpu); ok {
+		r0 = rf(ctx)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).([]domain.Cpu)
 		}
 	}
 
-	if rf, ok := ret.Get(1).(func() error); ok {
-		r1 = rf()
+	if rf, ok := ret.Get(1).(func(context.Context) error); ok {
+		r1 = rf(ctx)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -57,13 +58,14 @@ type CpuRepository_All_Call struct {
 }
 
 // All is a helper method to define mock.On call
-func (_e *CpuRepository_Expecter) All() *CpuRepository_All_Call {
-	return &CpuRepository_All_Call{Call: _e.mock.On("All")}
+//   - ctx context.Context
+func (_e *CpuRepository_Expecter) All(ctx interface{}) *CpuRepository_All_Call {
+	return &CpuRepository_All_Call{Call: _e.mock.On("All", ctx)}
 }
 
-func (_c *CpuRepository_All_Call) Run(run func()) *CpuRepository_All_Call {
+func (_c *CpuRepository_All_Call) Run(run func(ctx context.Context)) *CpuRepository_All_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run()
+		run(args[0].(context.Context))
 	})
 	return _c
 }
@@ -73,7 +75,7 @@ func (_c *CpuRepository_All_Call) Return(_a0 []domain.Cpu, _a1 error) *CpuReposi
 	return _c
 }
 
-func (_c *CpuRepository_All_Call) RunAndReturn(run func() ([]domain.Cpu, error)) *CpuRepository_All_Call {
+func (_c *CpuRepository_All_Call) RunAndReturn(run func(context.Context) ([]domain.Cpu, error)) *CpuRepository_All_Call {
 	_c.Call.Return(run)
 	return _c
 }

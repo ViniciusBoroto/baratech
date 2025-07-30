@@ -15,8 +15,20 @@ func NewCpuUsecase(cpuRepo domain.CpuRepository) domain.CpuUsecase {
 }
 
 func (c *cpuUsecase) BestByBudget(budget domain.Money) (domain.Cpu, error) {
-	return domain.Cpu{
-		Model:      "Ryzen 5",
-		Generation: "5600",
-	}, nil
+	cpus, err := c.cpuRepository.All()
+	if err != nil {
+		return domain.Cpu{}, err
+	}
+
+	var bestCpu domain.Cpu
+	for _, cpu := range cpus {
+		if cpu.Price.Amount <= budget.Amount && cpu.Score.Multitask > bestCpu.Score.Multitask {
+			bestCpu = cpu
+		}
+	}
+	if bestCpu.Model == "" {
+		return domain.Cpu{}, domain.ErrNoCpuFound
+	}
+
+	return bestCpu, nil
 }

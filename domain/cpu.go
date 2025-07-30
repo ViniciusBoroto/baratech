@@ -1,5 +1,7 @@
 package domain
 
+import "context"
+
 type CpuBrand string
 
 const (
@@ -22,10 +24,17 @@ type Cpu struct {
 	Price      Money
 	Model      string
 	Generation string
+	Socket     string
+}
+
+type CpuCooler struct {
+	TDP    int
+	Socket string
 }
 
 type CpuRepository interface {
-	All() ([]Cpu, error)
+	All(ctx context.Context) ([]Cpu, error)
+	Cheapest(ctx context.Context) (Cpu, error)
 }
 
 type CpuUsecase interface {

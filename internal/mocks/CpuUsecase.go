@@ -3,6 +3,7 @@
 package mocks
 
 import (
+	context "context"
 	domain "dreampc/domain"
 
 	mock "github.com/stretchr/testify/mock"
@@ -73,6 +74,62 @@ func (_c *CpuUsecase_BestByBudget_Call) Return(_a0 domain.Cpu, _a1 error) *CpuUs
 }
 
 func (_c *CpuUsecase_BestByBudget_Call) RunAndReturn(run func(domain.Money) (domain.Cpu, error)) *CpuUsecase_BestByBudget_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// MinPrice provides a mock function with given fields: ctx
+func (_m *CpuUsecase) MinPrice(ctx context.Context) (domain.Money, error) {
+	ret := _m.Called(ctx)
+
+	if len(ret) == 0 {
+		panic("no return value specified for MinPrice")
+	}
+
+	var r0 domain.Money
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context) (domain.Money, error)); ok {
+		return rf(ctx)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context) domain.Money); ok {
+		r0 = rf(ctx)
+	} else {
+		r0 = ret.Get(0).(domain.Money)
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context) error); ok {
+		r1 = rf(ctx)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// CpuUsecase_MinPrice_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'MinPrice'
+type CpuUsecase_MinPrice_Call struct {
+	*mock.Call
+}
+
+// MinPrice is a helper method to define mock.On call
+//   - ctx context.Context
+func (_e *CpuUsecase_Expecter) MinPrice(ctx interface{}) *CpuUsecase_MinPrice_Call {
+	return &CpuUsecase_MinPrice_Call{Call: _e.mock.On("MinPrice", ctx)}
+}
+
+func (_c *CpuUsecase_MinPrice_Call) Run(run func(ctx context.Context)) *CpuUsecase_MinPrice_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context))
+	})
+	return _c
+}
+
+func (_c *CpuUsecase_MinPrice_Call) Return(_a0 domain.Money, _a1 error) *CpuUsecase_MinPrice_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
+}
+
+func (_c *CpuUsecase_MinPrice_Call) RunAndReturn(run func(context.Context) (domain.Money, error)) *CpuUsecase_MinPrice_Call {
 	_c.Call.Return(run)
 	return _c
 }
