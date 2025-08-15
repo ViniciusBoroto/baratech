@@ -1,9 +1,9 @@
 package domain
 
 type Build struct {
-	Core Core
+	Price float64
 }
 
 type BuildUsecase interface {
-	BestByBudget(budget Money) (Build, error)
+	BestByBudgetAndFilters(budget float64, goal BuildGoal) (Build, error)
 }
