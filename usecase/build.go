@@ -2,14 +2,23 @@ package usecase
 
 import "dreampc/domain"
 
-type Build struct{}
-
-func NewBuild() *Build {
-	return &Build{}
+type build struct {
+	coreRepo domain.CoreRepository
 }
 
-func (b *Build) BestByBudgetAndFilters(budget float64, goal domain.BuildGoal) (domain.Build, error) {
-	if budget < 1000 {
+func NewBuild(coreRepo domain.CoreRepository) domain.BuildUsecase {
+	return &build{
+		coreRepo: coreRepo,
+	}
+}
+
+func (b *build) BestByBudgetAndFilters(budget float64, goal domain.BuildGoal) (domain.Build, error) {
+	minCoreBudget, err := b.coreRepo.MinimumBudget()
+	if err != nil {
+		return domain.Build{}, err
+	}
+
+	if budget < minCoreBudget {
 		return domain.Build{}, domain.ErrInsufficientBudget
 	}
 
