@@ -1,7 +1,7 @@
 package usecase
 
 import (
-	"dreampc/domain"
+	"dreampc/internal/domain"
 	"errors"
 )
 

@@ -5,7 +5,7 @@
 package mocks
 
 import (
-	domain "dreampc/domain"
+	"dreampc/internal/domain"
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"

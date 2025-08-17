@@ -1,7 +1,7 @@
 package usecase
 
 import (
-	"dreampc/domain"
+	"dreampc/internal/domain"
 	"dreampc/internal/mocks"
 	"testing"
 
@@ -55,6 +55,19 @@ func TestCoreUsecase_FindBestCore(t *testing.T) {
 				Mobo: domain.Mobo{Socket: "LGA1200", Price: 300.00},
 			},
 			expectedError: nil,
+		},
+		{
+			name:   "Insufficient budget",
+			budget: 200,
+			setMocks: func(m *testMocks) {
+				m.CpuRepo.EXPECT().AllOrderByScoreDesc().Return([]domain.Cpu{
+					{Cores: 6, Speed: 4.0, Socket: "LGA1200", Score: 1500, Price: 300.00},
+					{Cores: 4, Speed: 3.5, Socket: "AM4", Score: 1000, Price: 200.00},
+					{Cores: 4, Speed: 3.5, Socket: "AM4", Score: 800, Price: 250.00},
+				}, nil).Times(1)
+			},
+			expectedCore:  domain.Core{},
+			expectedError: domain.ErrInsufficientBudget,
 		},
 	}
 	for _, tc := range tt {
