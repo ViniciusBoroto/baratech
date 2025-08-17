@@ -1,0 +1,32 @@
+package usecase
+
+import (
+	"dreampc/domain"
+	"dreampc/internal/mocks"
+	"testing"
+
+	"github.com/golang/mock/gomock"
+	"github.com/stretchr/testify/assert"
+)
+
+func TestCoreUsecase_FindBestCore(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	cpuRepo := mocks.NewMockCpuRepository(ctrl)
+	usecase := NewCoreUsecase(cpuRepo)
+
+	cpuRepo.EXPECT().AllOrderByScoreDesc().Return([]domain.Cpu{
+		{Cores: 6, Speed: 4.0, Socket: "LGA1200", Score: 1500, Price: 300.00},
+		{Cores: 4, Speed: 3.5, Socket: "AM4", Score: 1000, Price: 200.00},
+		{Cores: 4, Speed: 3.5, Socket: "AM4", Score: 800, Price: 250.00},
+	}, nil).Times(1)
+
+	result, err := usecase.FindBestCore(1000)
+	assert.NoError(t, err)
+
+	expected := domain.Core{
+		Cpu:  domain.Cpu{Cores: 6, Speed: 4.0, Socket: "LGA1200", Score: 1500, Price: 300.00},
+		Mobo: domain.Mobo{Socket: "LGA1200", Price: 300.00},
+	}
+	assert.Equal(t, expected, result)
+}
