@@ -24,10 +24,27 @@ func TestCoreUsecase_FindBestCore(t *testing.T) {
 		expectedError error
 	}{
 		{
-			name:   "Sufficient budget",
+			name:   "Sufficient budget and best build",
 			budget: 1000,
 			setMocks: func(m *testMocks) {
 				m.CpuRepo.EXPECT().AllOrderByScoreDesc().Return([]domain.Cpu{
+					{Cores: 6, Speed: 4.0, Socket: "LGA1200", Score: 1500, Price: 300.00},
+					{Cores: 4, Speed: 3.5, Socket: "AM4", Score: 1000, Price: 200.00},
+					{Cores: 4, Speed: 3.5, Socket: "AM4", Score: 800, Price: 250.00},
+				}, nil).Times(1)
+			},
+			expectedCore: domain.Core{
+				Cpu:  domain.Cpu{Cores: 6, Speed: 4.0, Socket: "LGA1200", Score: 1500, Price: 300.00},
+				Mobo: domain.Mobo{Socket: "LGA1200", Price: 300.00},
+			},
+			expectedError: nil,
+		},
+		{
+			name:   "Sufficient budget and second best build",
+			budget: 600,
+			setMocks: func(m *testMocks) {
+				m.CpuRepo.EXPECT().AllOrderByScoreDesc().Return([]domain.Cpu{
+					{Cores: 6, Speed: 4.2, Socket: "LGA1200", Score: 2000, Price: 400.00},
 					{Cores: 6, Speed: 4.0, Socket: "LGA1200", Score: 1500, Price: 300.00},
 					{Cores: 4, Speed: 3.5, Socket: "AM4", Score: 1000, Price: 200.00},
 					{Cores: 4, Speed: 3.5, Socket: "AM4", Score: 800, Price: 250.00},
