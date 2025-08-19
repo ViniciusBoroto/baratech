@@ -9,7 +9,11 @@ type core struct {
 	cpuRepo domain.CpuRepository
 }
 
-func NewCoreService(cpuRepo domain.CpuRepository) domain.CoreService {
+type CoreService interface {
+	FindBestCore(budget float64) (domain.Core, error)
+}
+
+func NewCoreService(cpuRepo domain.CpuRepository) CoreService {
 	return &core{
 		cpuRepo: cpuRepo,
 	}
