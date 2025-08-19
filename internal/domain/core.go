@@ -5,6 +5,6 @@ type Core struct {
 	Mobo Mobo
 }
 
-type CoreUsecase interface {
+type CoreService interface {
 	FindBestCore(budget float64) (Core, error)
 }

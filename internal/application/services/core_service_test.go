@@ -1,4 +1,4 @@
-package usecase
+package service
 
 import (
 	"dreampc/internal/domain"
@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestCoreUsecase_FindBestCore(t *testing.T) {
+func TestCoreService_FindBestCore(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 	type testMocks struct {
@@ -86,7 +86,7 @@ func TestCoreUsecase_FindBestCore(t *testing.T) {
 	for _, tc := range tt {
 		t.Run(tc.name, func(t *testing.T) {
 			cpuRepo := mocks.NewMockCpuRepository(ctrl)
-			usecase := NewCoreUsecase(cpuRepo)
+			usecase := NewCoreService(cpuRepo)
 			tc.setMocks(&testMocks{CpuRepo: cpuRepo})
 
 			result, err := usecase.FindBestCore(tc.budget)
@@ -100,7 +100,7 @@ func TestCoreUsecase_FindBestCore_WhenInsufficientBudget(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 	cpuRepo := mocks.NewMockCpuRepository(ctrl)
-	usecase := NewCoreUsecase(cpuRepo)
+	usecase := NewCoreService(cpuRepo)
 
 	cpuRepo.EXPECT().AllOrderByScoreDesc().Return([]domain.Cpu{
 		{Cores: 6, Speed: 4.0, Socket: "LGA1200", Score: 1500, Price: 300.00},

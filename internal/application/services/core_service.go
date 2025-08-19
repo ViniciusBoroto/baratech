@@ -1,4 +1,4 @@
-package usecase
+package service
 
 import (
 	"dreampc/internal/domain"
@@ -9,7 +9,7 @@ type core struct {
 	cpuRepo domain.CpuRepository
 }
 
-func NewCoreUsecase(cpuRepo domain.CpuRepository) domain.CoreUsecase {
+func NewCoreService(cpuRepo domain.CpuRepository) domain.CoreService {
 	return &core{
 		cpuRepo: cpuRepo,
 	}
