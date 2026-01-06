@@ -5,7 +5,6 @@ class Component(BaseModel):
     name: str
     price: float
     score: int  # 1-100
-    category: str  # cpu, gpu, ram, storage, motherboard, power_supply, case
 
 class Cpu(Component):
     ddr: int
@@ -19,6 +18,7 @@ class Motherboard(Component):
 class Ram(Component):
     ddr: int
     frequency: int
+    gbCapacity: int
 
 class Gpu(Component):
     vram: int

@@ -8,4 +8,4 @@ class MachineConfig(BaseModel):
     gpu: Gpu
     storage: List[Storage]
     powerSupply: PowerSupply
-    case: Case
+    computerCase: Case
