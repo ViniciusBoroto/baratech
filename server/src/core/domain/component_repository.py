@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import List
-from server.src.core.domain.component import Component
+
+from core.domain.components import Component
 
 class ComponentRepository(ABC):
     @abstractmethod

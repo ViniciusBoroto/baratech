@@ -1,6 +1,6 @@
 from typing import List
-from server.src.core.domain.component import Component
-from server.src.core.domain.component_repository import ComponentRepository
+from core.domain.components import Component
+from src.core.domain.component_repository import ComponentRepository
 
 class InMemoryComponentRepository(ComponentRepository):
     def __init__(self):

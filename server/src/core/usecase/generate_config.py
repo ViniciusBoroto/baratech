@@ -1,17 +1,16 @@
-from server.src.core.domain.machine_config import MachineConfig
-from server.src.core.domain.machine_focus import MachineFocus
-from server.src.core.domain.budget_allocation import BudgetAllocationStrategy
-from server.src.core.domain.component_repository import ComponentRepository
-from server.src.core.infra.in_memory_component_repository import InMemoryComponentRepository
+from src.core.domain.machine_config import MachineConfig
+from src.core.domain.machine_focus import MachineFocus
+from src.core.domain.budget_allocation import BudgetAllocationStrategy
+from src.core.domain.component_repository import ComponentRepository
+from src.core.infra.in_memory_component_repository import InMemoryComponentRepository
 
 
-class GenerateSpecsUseCase:
+class GenerateConfigUseCase:
     def __init__(self, component_repo: ComponentRepository = None) -> None:
         self.component_repo = component_repo or InMemoryComponentRepository()
     
-    def execute(self, budget: float, focus: str) -> MachineConfig:
-        machine_focus = MachineFocus(focus)
-        allocation = BudgetAllocationStrategy.get_allocation(machine_focus, budget)
+    def execute(self, budget: float, focus: MachineFocus) -> MachineConfig:
+        allocation = BudgetAllocationStrategy.get_allocation(focus, budget)
         
         # Select best components within allocated budgets
         cpu = self.component_repo.get_best_component_in_budget('cpu', allocation['cpu'])

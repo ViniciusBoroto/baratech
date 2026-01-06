@@ -1,10 +1,11 @@
 from pydantic import BaseModel
 
+from core.domain.components import *
+from typing import List
+
 class MachineConfig(BaseModel):
-    cpu: str
-    gpu: str
-    ram: str
-    storage: str
-    motherboard: str
-    powerSupply: str
-    case: str
+    # core: Core
+    gpu: Gpu
+    storage: List[Storage]
+    powerSupply: PowerSupply
+    case: Case
