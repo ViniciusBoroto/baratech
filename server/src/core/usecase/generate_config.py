@@ -20,23 +20,22 @@ class GenerateConfigUseCase:
         kits = []
         for cpu in cpus:
             for mobo in mobos:
-                if cpu.price + mobo.price > maximum_budget: continue
-                if not mobo.accepts_cpu(cpu): continue
+                if cpu.price + mobo.average_price > maximum_budget:
+                    continue
+                if not mobo.accepts_cpu(cpu):
+                    continue
                 for ram in rams:
-                    if ram.ddr != mobo.ddr: continue
-                    if cpu.price + mobo.price + ram.price > maximum_budget: continue
-                    if not mobo.accepts_ram(ram): continue
+                    if not mobo.accepts_ram(ram):
+                        continue
+                    if cpu.price + mobo.average_price + ram.average_price > maximum_budget:
+                        continue
+                    if not mobo.accepts_ram(ram):
+                        continue
                     kits.append(ProcessingKit(cpu=cpu, motherboard=mobo, ram=ram))
         return kits
 
     def execute(self, budget: float, focus: MachineFocus) -> MachineConfig:
-        socket = "AM4"
         kits = self._get_processing_kits(maximum_budget=budget, focus=focus)
-
-        cpu = Cpu(name="good ddr4 cpu", ddr=4, score=1200,socket=socket, hasGraphics=False, price=1500)
-        mobo = MotherboardCategory(ddr=4, socket=socket,averagePrice=500)
-        ram = RamCategory(ddr=4, frequency=3200, gbCapacity=16, averagePrice=200)
-        gpu = Gpu(name="good gpu", score=1200, price=1500, vram=8, frequency=1800)
-
-        return MachineConfig(gpu=gpu, processingKit=ProcessingKit(cpu=cpu, motherboard=mobo, ram=ram))
+        kit = kits[0]
+        return MachineConfig(processingKit=ProcessingKit(cpu=kit.cpu, motherboard=kit.motherboard, ram=kit.ram))
     

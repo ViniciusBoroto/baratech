@@ -7,7 +7,7 @@ from core.domain.models.components import *
 
 class MachineConfig(BaseModel):
     processingKit: ProcessingKit
-    gpu: Gpu
+    gpu: Gpu | None = None
 
     def socket(self) -> str:
         return self.processingKit.cpu.socket

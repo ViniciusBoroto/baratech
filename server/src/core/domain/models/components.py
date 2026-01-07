@@ -23,6 +23,11 @@ class Gpu(Component):
 class MotherboardCategory(ComponentCategory):
     socket: str
     ddr: int
+    def accepts_cpu(self, cpu: Cpu) -> bool:
+        return cpu.socket == self.socket and cpu.ddr == self.ddr
+    def accepts_ram(self, ram: 'RamCategory') -> bool:
+        return ram.ddr == self.ddr
+
 class RamCategory(ComponentCategory):
     ddr: int
     frequency: int
