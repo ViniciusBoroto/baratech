@@ -1,6 +1,6 @@
 from typing import List
-from core.domain.components import Component
-from src.core.domain.component_repository import ComponentRepository
+from core.domain.models import Component
+from src.core.domain.ports import ComponentRepository
 
 class InMemoryComponentRepository(ComponentRepository):
     def __init__(self):

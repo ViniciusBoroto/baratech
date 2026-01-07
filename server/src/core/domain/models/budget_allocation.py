@@ -1,4 +1,4 @@
-from server.src.core.domain.machine_focus import MachineFocus
+from core.domain.models import MachineFocus
 from typing import Dict
 
 class BudgetAllocationStrategy:
