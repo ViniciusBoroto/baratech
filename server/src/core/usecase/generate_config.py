@@ -36,6 +36,6 @@ class GenerateConfigUseCase:
 
     def execute(self, budget: float, focus: MachineFocus) -> MachineConfig:
         kits = self._get_processing_kits(maximum_budget=budget, focus=focus)
-        kit = kits[0]
+        kit = max(kits, key=lambda k: k.cpu.score)
         return MachineConfig(processingKit=ProcessingKit(cpu=kit.cpu, motherboard=kit.motherboard, ram=kit.ram))
     

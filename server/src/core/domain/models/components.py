@@ -54,5 +54,5 @@ class ProcessingKit(BaseModel):
 
     def average_price(self) -> float:
         return (self.cpu.price + 
-                self.motherboard.averagePrice + 
-                self.ram.averagePrice)
+                self.motherboard.average_price + 
+                self.ram.average_price)
