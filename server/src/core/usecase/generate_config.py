@@ -33,9 +33,12 @@ class GenerateConfigUseCase:
                         continue
                     kits.append(ProcessingKit(cpu=cpu, motherboard=mobo, ram=ram))
         return kits
+    
+    def _filter_best_kit(self, kits: List[ProcessingKit]) -> ProcessingKit:
+        return max(kits, key=lambda k: k.cpu.score)
 
     def execute(self, budget: float, focus: MachineFocus) -> MachineConfig:
         kits = self._get_processing_kits(maximum_budget=budget, focus=focus)
-        kit = max(kits, key=lambda k: k.cpu.score)
+        kit = self._filter_best_kit(kits) 
         return MachineConfig(processingKit=ProcessingKit(cpu=kit.cpu, motherboard=kit.motherboard, ram=kit.ram))
     
