@@ -1,22 +1,34 @@
 from pydantic import BaseModel
 from typing import Dict, Any
 
+
+
 class Component(BaseModel):
     name: str
     price: float
-    score: int  # 1-100
 
 class ComponentCategory(BaseModel):
     average_price: float
 
+def _relative_score(score: int, maximum_reference: int):
+    return score / maximum_reference * 100
+
 class Cpu(Component):
     ddr: int
     socket: str
-    apu_score: int = None
+    score: int
+    apu_score: int | None = None
+    def get_relative_score(self, maximum_reference: int):
+        return _relative_score(self.score, maximum_reference)
+    def get_relative_apu_score(self, maximum_reference: int):
+        return _relative_score(self.apu_score, maximum_reference)
 
 class Gpu(Component):
     vram: int
     frequency: int
+    score: int
+    def get_relative_score(self, maximum_reference: int):
+        return _relative_score(self.score, maximum_reference)
 
 
 #Categories
