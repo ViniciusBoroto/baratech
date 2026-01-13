@@ -7,10 +7,11 @@ from core.domain.ports.repositories import *
 
 
 class GenerateConfigUseCase:
-    def __init__(self, cpu_repo: CpuRepository, mobo_repo: MotherboardRepository, ram_repo: RamRepository) -> None:
+    def __init__(self, cpu_repo: CpuRepositoryPort, mobo_repo: MotherboardRepositoryPort, ram_repo: RamRepositoryPort, gpu_repo: GpuRepositoryPort) -> None:
         self.cpu_repo = cpu_repo
         self.mobo_repo = mobo_repo
         self.ram_repo = ram_repo
+        self.gpu_repo = gpu_repo
     
     def _get_processing_kits(self, maximum_budget: float, focus: MachineFocus) -> List[ProcessingKit]:
         cpus = self.cpu_repo.get_all_by_budget(maximum_budget) 
@@ -37,8 +38,32 @@ class GenerateConfigUseCase:
     def _filter_best_kit(self, kits: List[ProcessingKit]) -> ProcessingKit:
         return max(kits, key=lambda k: k.cpu.score)
 
+    def _combine_processing_kits_with_gpus(self, kits: list[ProcessingKit], gpus: list[Gpu], budget: float) -> list[MachineConfig]:
+            cfgs =[]
+            for kit in kits:
+                if kit.cpu.apu_score:
+                    cfgs.append(MachineConfig(processingKit=kit))
+                for gpu in gpus:
+                    if gpu.price + kit.average_price() <= budget:
+                        cfgs.append(MachineConfig(processingKit=kit, gpu=gpu))
+
+            return cfgs
+    def _get_most_performatic_config(self, configs: list[MachineConfig]) -> MachineConfig:
+        return max(configs, key=lambda c: c.total_cost())
+
     def execute(self, budget: float, focus: MachineFocus) -> MachineConfig:
         kits = self._get_processing_kits(maximum_budget=budget, focus=focus)
         kit = self._filter_best_kit(kits) 
-        return MachineConfig(processingKit=ProcessingKit(cpu=kit.cpu, motherboard=kit.motherboard, ram=kit.ram))
+        if not kit:
+            raise Exception("No kit found")
+        
+        gpus = self.gpu_repo.get_all_by_budget(budget)
+        candidates = self._combine_processing_kits_with_gpus(kits, gpus, budget)
+        if not candidates:
+            raise Exception("No config found")
+        best = self._get_most_performatic_config(candidates)
+        if not best:
+            raise Exception("No config found")
+
+        return best
     
